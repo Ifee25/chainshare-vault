@@ -199,7 +199,11 @@ export default function Register() {
 
               <Button 
                 type="submit" 
-                className="w-full h-11 bg-secondary hover:bg-secondary/90 transition-all duration-300"
+                className={`w-full h-11 transition-all duration-300 ${
+                  formData.acceptTerms 
+                    ? "bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground shadow-glow hover:shadow-glow/80" 
+                    : "bg-secondary/50 hover:bg-secondary/60"
+                }`}
                 size="lg"
                 disabled={!formData.acceptTerms}
               >
