@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { 
   Upload as UploadIcon, 
   FileText,
@@ -13,14 +14,110 @@ import {
   Lock,
   Shield,
   Clock,
-  Zap
+  Zap,
+  X,
+  Check,
+  AlertCircle,
+  Image,
+  Film,
+  Music,
+  Archive
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useCallback } from "react";
+
+interface UploadedFile {
+  id: string;
+  file: File;
+  progress: number;
+  status: 'uploading' | 'completed' | 'error';
+  preview?: string;
+}
 
 const Upload = () => {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isPublic, setIsPublic] = useState(false);
   const [encryptionEnabled, setEncryptionEnabled] = useState(true);
+  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const getFileIcon = (file: File) => {
+    const type = file.type;
+    if (type.startsWith('image/')) return <Image className="w-4 h-4" />;
+    if (type.startsWith('video/')) return <Film className="w-4 h-4" />;
+    if (type.startsWith('audio/')) return <Music className="w-4 h-4" />;
+    if (type.includes('zip') || type.includes('rar')) return <Archive className="w-4 h-4" />;
+    return <FileText className="w-4 h-4" />;
+  };
+
+  const formatFileSize = (bytes: number) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const validateFile = (file: File) => {
+    const maxSize = 20 * 1024 * 1024; // 20MB
+    if (file.size > maxSize) {
+      alert(`File ${file.name} is too large. Maximum size is 20MB.`);
+      return false;
+    }
+    return true;
+  };
+
+  const simulateUpload = (fileId: string) => {
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += Math.random() * 15;
+      if (progress >= 100) {
+        progress = 100;
+        clearInterval(interval);
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileId ? { ...f, progress: 100, status: 'completed' } : f
+        ));
+        setIsUploading(false);
+      } else {
+        setUploadedFiles(prev => prev.map(f => 
+          f.id === fileId ? { ...f, progress } : f
+        ));
+      }
+    }, 200);
+  };
+
+  const handleFiles = useCallback((files: FileList | File[]) => {
+    const fileArray = Array.from(files);
+    const validFiles = fileArray.filter(validateFile);
+    
+    if (validFiles.length === 0) return;
+
+    setIsUploading(true);
+    
+    validFiles.forEach((file) => {
+      const fileId = Date.now() + Math.random().toString();
+      const newFile: UploadedFile = {
+        id: fileId,
+        file,
+        progress: 0,
+        status: 'uploading'
+      };
+
+      // Create preview for images
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setUploadedFiles(prev => prev.map(f => 
+            f.id === fileId ? { ...f, preview: e.target?.result as string } : f
+          ));
+        };
+        reader.readAsDataURL(file);
+      }
+
+      setUploadedFiles(prev => [...prev, newFile]);
+      simulateUpload(fileId);
+    });
+  }, []);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -35,7 +132,22 @@ const Upload = () => {
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     setIsDragOver(false);
-    // Handle file drop logic here
+    const files = e.dataTransfer.files;
+    handleFiles(files);
+  };
+
+  const handleFileSelect = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      handleFiles(e.target.files);
+    }
+  };
+
+  const removeFile = (fileId: string) => {
+    setUploadedFiles(prev => prev.filter(f => f.id !== fileId));
   };
 
   return (
@@ -58,32 +170,125 @@ const Upload = () => {
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardContent className="p-6">
                   <div
-                    className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 ${
+                    className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 cursor-pointer group ${
                       isDragOver 
-                        ? "border-primary bg-primary/10" 
-                        : "border-border hover:border-primary/50 hover:bg-primary/5"
+                        ? "border-primary bg-primary/20 scale-105 shadow-glow" 
+                        : "border-border hover:border-primary/50 hover:bg-primary/5 hover:scale-102"
                     }`}
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleDrop}
+                    onClick={handleFileSelect}
                   >
-                    <div className="w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4">
-                      <UploadIcon className="w-8 h-8 text-primary-foreground" />
+                    <div className={`w-16 h-16 bg-gradient-primary rounded-full flex items-center justify-center mx-auto mb-4 transition-all duration-300 ${
+                      isDragOver ? 'animate-bounce' : 'group-hover:scale-110'
+                    }`}>
+                      <UploadIcon className={`w-8 h-8 text-primary-foreground transition-all duration-300 ${
+                        isDragOver ? 'animate-pulse' : ''
+                      }`} />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">Drop files here</h3>
+                    <h3 className="text-xl font-semibold mb-2">
+                      {isDragOver ? 'Drop files here!' : 'Drop files here'}
+                    </h3>
                     <p className="text-muted-foreground mb-4">
                       or click to browse from your device
                     </p>
-                    <Button variant="outline">
+                    <Button 
+                      variant="outline" 
+                      className="hover:bg-primary/10 hover:border-primary/40 transition-all duration-300"
+                      onClick={(e) => e.stopPropagation()}
+                    >
                       <FileText className="w-4 h-4 mr-2" />
                       Browse Files
                     </Button>
                     <div className="mt-4 text-sm text-muted-foreground">
-                      Maximum file size: 100MB • Supported formats: All types
+                      Maximum file size: 20MB • Supported formats: All types
                     </div>
                   </div>
+                  
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={handleFileInputChange}
+                    accept="*/*"
+                  />
                 </CardContent>
               </Card>
+
+              {/* Uploaded Files List */}
+              {uploadedFiles.length > 0 && (
+                <Card className="bg-card/50 backdrop-blur-sm border-border/50">
+                  <CardHeader>
+                    <CardTitle className="flex items-center justify-between">
+                      <span>Uploaded Files ({uploadedFiles.length})</span>
+                      {isUploading && (
+                        <Badge variant="outline" className="animate-pulse">
+                          <Clock className="w-3 h-3 mr-1" />
+                          Uploading...
+                        </Badge>
+                      )}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {uploadedFiles.map((uploadedFile) => (
+                      <div key={uploadedFile.id} className="flex items-center space-x-4 p-3 bg-background/50 rounded-lg border border-border/50">
+                        <div className="flex-shrink-0">
+                          {uploadedFile.preview ? (
+                            <div className="w-12 h-12 rounded-lg overflow-hidden border border-border/30">
+                              <img 
+                                src={uploadedFile.preview} 
+                                alt={uploadedFile.file.name}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          ) : (
+                            <div className="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center">
+                              {getFileIcon(uploadedFile.file)}
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium truncate">{uploadedFile.file.name}</p>
+                          <p className="text-xs text-muted-foreground">{formatFileSize(uploadedFile.file.size)}</p>
+                          
+                          {uploadedFile.status === 'uploading' && (
+                            <div className="mt-2">
+                              <Progress value={uploadedFile.progress} className="h-2" />
+                              <p className="text-xs text-muted-foreground mt-1">
+                                {Math.round(uploadedFile.progress)}% uploaded
+                              </p>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex-shrink-0 flex items-center space-x-2">
+                          {uploadedFile.status === 'completed' && (
+                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                              <Check className="w-4 h-4 text-white" />
+                            </div>
+                          )}
+                          {uploadedFile.status === 'error' && (
+                            <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center">
+                              <AlertCircle className="w-4 h-4 text-white" />
+                            </div>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => removeFile(uploadedFile.id)}
+                            className="w-6 h-6 p-0 hover:bg-red-500/20 hover:text-red-500"
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
 
               {/* File Details */}
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
@@ -208,9 +413,17 @@ const Upload = () => {
                 </CardContent>
               </Card>
 
-              <Button className="w-full bg-gradient-primary hover:opacity-90 transition-opacity" size="lg">
+              <Button 
+                className={`w-full transition-all duration-300 ${
+                  uploadedFiles.length > 0 && uploadedFiles.every(f => f.status === 'completed')
+                    ? "bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground shadow-glow hover:shadow-glow/80 hover:scale-105"
+                    : "bg-secondary/50 hover:bg-secondary/60"
+                }`}
+                size="lg"
+                disabled={uploadedFiles.length === 0 || isUploading || !uploadedFiles.every(f => f.status === 'completed')}
+              >
                 <UploadIcon className="w-4 h-4 mr-2" />
-                Upload to Blockchain
+                {isUploading ? "Uploading..." : "Upload to Blockchain"}
               </Button>
             </div>
           </div>
