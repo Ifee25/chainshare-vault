@@ -59,13 +59,15 @@ const Navigation = () => {
         </div>
       </div>
       
-      <Button 
-        variant="outline" 
-        className="flex items-center space-x-2 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
-      >
-        <Wallet className="w-4 h-4" />
-        <span>Connect Wallet</span>
-      </Button>
+      <Link to="/login">
+        <Button 
+          variant="outline" 
+          className="flex items-center space-x-2 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+        >
+          <Wallet className="w-4 h-4" />
+          <span>Login</span>
+        </Button>
+      </Link>
     </nav>
   );
 };
