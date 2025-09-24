@@ -50,31 +50,47 @@ export default function Login() {
           
           <CardContent className="space-y-6">
             {/* Wallet Connection */}
-            <div className="space-y-3">
+            <div className="space-y-4">
               <Button 
                 onClick={handleWalletConnect}
-                className="w-full h-12 bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground font-medium transition-all duration-300 hover:shadow-glow"
+                className="w-full h-14 bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground font-semibold text-base transition-all duration-300 hover:shadow-glow hover:scale-[1.02] active:scale-[0.98] group"
                 size="lg"
               >
-                <Wallet className="w-5 h-5 mr-2" />
+                <Wallet className="w-6 h-6 mr-3 group-hover:animate-pulse" />
                 Connect Wallet
               </Button>
               
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <Button 
                   variant="outline" 
-                  className="h-10 border-primary/20 hover:bg-primary/10 hover:border-primary/40"
+                  className="h-12 border-primary/30 hover:bg-primary/20 hover:border-primary/60 hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95 group"
                   onClick={() => console.log("MetaMask")}
                 >
-                  MetaMask
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center group-hover:animate-bounce">
+                      <Wallet className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs font-medium">MetaMask</span>
+                  </div>
                 </Button>
                 <Button 
                   variant="outline" 
-                  className="h-10 border-primary/20 hover:bg-primary/10 hover:border-primary/40"
+                  className="h-12 border-primary/30 hover:bg-primary/20 hover:border-primary/60 hover:shadow-md transition-all duration-300 hover:scale-105 active:scale-95 group"
                   onClick={() => console.log("WalletConnect")}
                 >
-                  WalletConnect
+                  <div className="flex flex-col items-center gap-1">
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center group-hover:animate-bounce">
+                      <Wallet className="w-3 h-3 text-white" />
+                    </div>
+                    <span className="text-xs font-medium">WalletConnect</span>
+                  </div>
                 </Button>
+              </div>
+              
+              <div className="text-center">
+                <p className="text-xs text-muted-foreground">
+                  ⚡ One-click login • 🔐 Secure • 🚀 Web3 ready
+                </p>
               </div>
             </div>
 
