@@ -9,6 +9,7 @@ import MyFiles from "./pages/MyFiles";
 import SharedFiles from "./pages/SharedFiles";
 import Permissions from "./pages/Permissions";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/shared" element={<SharedFiles />} />
           <Route path="/permissions" element={<Permissions />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
