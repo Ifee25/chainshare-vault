@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
 import MyFiles from "./pages/MyFiles";
 import SharedFiles from "./pages/SharedFiles";
+import ShareFile from "./pages/ShareFile";
 import Permissions from "./pages/Permissions";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/upload" element={<Upload />} />
           <Route path="/my-files" element={<MyFiles />} />
           <Route path="/shared" element={<SharedFiles />} />
+          <Route path="/share-file" element={<ShareFile />} />
           <Route path="/permissions" element={<Permissions />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

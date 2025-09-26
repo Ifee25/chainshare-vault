@@ -14,8 +14,11 @@ import {
   Eye,
   UserPlus
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SharedFiles = () => {
+  const navigate = useNavigate();
+  
   const sharedWithMe = [
     {
       name: "Team_Roadmap_2024.pdf",
@@ -83,7 +86,10 @@ const SharedFiles = () => {
               Files shared with you and files you've shared with others
             </p>
           </div>
-          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto">
+          <Button 
+            className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto"
+            onClick={() => navigate('/share-file')}
+          >
             <UserPlus className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Share File</span>
             <span className="sm:hidden">Share</span>
@@ -200,7 +206,11 @@ const SharedFiles = () => {
                     <p className="text-sm text-muted-foreground mb-4">
                       Share your files with others to see them here
                     </p>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate('/share-file')}
+                    >
                       <Share2 className="w-4 h-4 mr-2" />
                       Share a File
                     </Button>
