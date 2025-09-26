@@ -12,8 +12,11 @@ import {
   TrendingUp,
   Plus
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
+  const navigate = useNavigate();
+  
   const recentFiles = [
     {
       name: "Contract_Agreement.pdf",
@@ -57,7 +60,10 @@ const Dashboard = () => {
               Manage your secure blockchain file storage
             </p>
           </div>
-          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto">
+          <Button 
+            className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto"
+            onClick={() => navigate('/upload')}
+          >
             <Plus className="w-4 h-4 mr-2" />
             <span className="hidden sm:inline">Upload File</span>
             <span className="sm:hidden">Upload</span>
@@ -118,15 +124,27 @@ const Dashboard = () => {
                 <CardTitle className="text-base md:text-lg font-semibold">Quick Actions</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 md:space-y-3">
-                <Button variant="outline" className="w-full justify-start text-sm">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start text-sm"
+                  onClick={() => navigate('/upload')}
+                >
                   <Upload className="w-4 h-4 mr-2" />
                   Upload New File
                 </Button>
-                <Button variant="outline" className="w-full justify-start text-sm">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start text-sm"
+                  onClick={() => navigate('/shared')}
+                >
                   <Share2 className="w-4 h-4 mr-2" />
                   Share with Address
                 </Button>
-                <Button variant="outline" className="w-full justify-start text-sm">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start text-sm"
+                  onClick={() => navigate('/my-files')}
+                >
                   <Files className="w-4 h-4 mr-2" />
                   Browse Files
                 </Button>
