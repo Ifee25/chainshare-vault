@@ -73,18 +73,19 @@ const Permissions = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 md:px-6 py-4 md:py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Access Control</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Access Control</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
               Manage file permissions and access controls
             </p>
           </div>
-          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity">
+          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto">
             <Plus className="w-4 h-4 mr-2" />
-            Grant Access
+            <span className="hidden sm:inline">Grant Access</span>
+            <span className="sm:hidden">Grant</span>
           </Button>
         </div>
 
@@ -126,17 +127,17 @@ const Permissions = () => {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Access Control List */}
           <div className="lg:col-span-2">
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader>
-                <CardTitle className="flex items-center justify-between">
+                <CardTitle className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                   <span className="flex items-center">
                     <Shield className="w-5 h-5 mr-2 text-primary" />
-                    Permission Management
+                    <span className="text-base md:text-lg">Permission Management</span>
                   </span>
-                  <Badge variant="secondary">{accessControls.length} permissions</Badge>
+                  <Badge variant="secondary" className="text-xs">{accessControls.length} permissions</Badge>
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -185,7 +186,7 @@ const Permissions = () => {
           </div>
 
           {/* Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-4 md:space-y-6">
             {/* Grant New Access */}
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
               <CardHeader>

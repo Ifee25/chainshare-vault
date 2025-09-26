@@ -74,18 +74,19 @@ const SharedFiles = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 md:px-6 py-4 md:py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">Shared Files</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Shared Files</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
               Files shared with you and files you've shared with others
             </p>
           </div>
-          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity">
+          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto">
             <UserPlus className="w-4 h-4 mr-2" />
-            Share File
+            <span className="hidden sm:inline">Share File</span>
+            <span className="sm:hidden">Share</span>
           </Button>
         </div>
 
@@ -121,16 +122,16 @@ const SharedFiles = () => {
           </Card>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8">
           {/* Files Shared With Me */}
           <div>
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-xl font-semibold flex items-center">
+              <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                <CardTitle className="text-lg md:text-xl font-semibold flex items-center">
                   <Download className="w-5 h-5 mr-2 text-primary" />
                   Shared With Me
                 </CardTitle>
-                <Badge variant="secondary">{sharedWithMe.length} files</Badge>
+                <Badge variant="secondary" className="text-xs">{sharedWithMe.length} files</Badge>
               </CardHeader>
               <CardContent>
                 <div className="relative mb-6">
@@ -170,12 +171,12 @@ const SharedFiles = () => {
           {/* My Shared Files */}
           <div>
             <Card className="bg-card/50 backdrop-blur-sm border-border/50">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="text-xl font-semibold flex items-center">
+              <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+                <CardTitle className="text-lg md:text-xl font-semibold flex items-center">
                   <Share2 className="w-5 h-5 mr-2 text-primary" />
                   My Shared Files
                 </CardTitle>
-                <Badge variant="secondary">{mySharedFiles.length} files</Badge>
+                <Badge variant="secondary" className="text-xs">{mySharedFiles.length} files</Badge>
               </CardHeader>
               <CardContent>
                 <div className="relative mb-6">

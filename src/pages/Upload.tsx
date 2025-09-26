@@ -154,23 +154,23 @@ const Upload = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 md:px-6 py-4 md:py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">Upload Files</h1>
-            <p className="text-muted-foreground">
+          <div className="mb-6 md:mb-8">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">Upload Files</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
               Securely upload and share your files on the blockchain
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Upload Area */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-4 md:space-y-6">
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardContent className="p-6">
                   <div
-                    className={`border-2 border-dashed rounded-lg p-8 text-center transition-all duration-300 cursor-pointer group ${
+                    className={`border-2 border-dashed rounded-lg p-4 md:p-8 text-center transition-all duration-300 cursor-pointer group ${
                       isDragOver 
                         ? "border-primary bg-primary/20 scale-105 shadow-glow" 
                         : "border-border hover:border-primary/50 hover:bg-primary/5 hover:scale-102"
@@ -187,10 +187,10 @@ const Upload = () => {
                         isDragOver ? 'animate-pulse' : ''
                       }`} />
                     </div>
-                    <h3 className="text-xl font-semibold mb-2">
+                    <h3 className="text-lg md:text-xl font-semibold mb-2">
                       {isDragOver ? 'Drop files here!' : 'Drop files here'}
                     </h3>
-                    <p className="text-muted-foreground mb-4">
+                    <p className="text-muted-foreground mb-4 text-sm md:text-base">
                       or click to browse from your device
                     </p>
                     <Button 
@@ -326,7 +326,7 @@ const Upload = () => {
             </div>
 
             {/* Settings Panel */}
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               <Card className="bg-card/50 backdrop-blur-sm border-border/50">
                 <CardHeader>
                   <CardTitle className="flex items-center">

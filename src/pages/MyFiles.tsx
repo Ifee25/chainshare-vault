@@ -81,18 +81,19 @@ const MyFiles = () => {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <main className="container mx-auto px-6 py-8">
+      <main className="container mx-auto px-4 md:px-6 py-4 md:py-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>
-            <h1 className="text-3xl font-bold text-foreground mb-2">My Files</h1>
-            <p className="text-muted-foreground">
+            <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">My Files</h1>
+            <p className="text-muted-foreground text-sm md:text-base">
               Manage and organize your uploaded files
             </p>
           </div>
-          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity">
+          <Button className="bg-gradient-primary hover:opacity-90 transition-opacity w-full sm:w-auto">
             <Upload className="w-4 h-4 mr-2" />
-            Upload New
+            <span className="hidden sm:inline">Upload New</span>
+            <span className="sm:hidden">Upload</span>
           </Button>
         </div>
 
@@ -132,28 +133,30 @@ const MyFiles = () => {
 
         {/* Filters and Controls */}
         <Card className="bg-card/50 backdrop-blur-sm border-border/50 mb-6">
-          <CardContent className="p-4">
-            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-              <div className="flex items-center space-x-4 flex-1">
-                <div className="relative flex-1 max-w-md">
+          <CardContent className="p-3 md:p-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
+                <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
                   <Input 
                     placeholder="Search files..." 
-                    className="pl-10"
+                    className="pl-10 text-sm"
                   />
                 </div>
-                <Button variant="outline" size="sm">
-                  <Filter className="w-4 h-4 mr-2" />
-                  Filter
-                </Button>
-                <Button variant="outline" size="sm">
-                  <SortAsc className="w-4 h-4 mr-2" />
-                  Sort
-                </Button>
+                <div className="flex space-x-2">
+                  <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+                    <Filter className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Filter</span>
+                  </Button>
+                  <Button variant="outline" size="sm" className="flex-1 sm:flex-none">
+                    <SortAsc className="w-4 h-4 mr-2" />
+                    <span className="hidden sm:inline">Sort</span>
+                  </Button>
+                </div>
               </div>
               
-              <div className="flex items-center space-x-2">
-                <Badge variant="outline">All Files</Badge>
+              <div className="flex items-center justify-between">
+                <Badge variant="outline" className="text-xs">All Files</Badge>
                 <div className="flex bg-secondary rounded-lg p-1">
                   <Button
                     variant={viewMode === "grid" ? "default" : "ghost"}
@@ -178,9 +181,9 @@ const MyFiles = () => {
         </Card>
 
         {/* Files Grid */}
-        <div className={`grid gap-6 ${
+        <div className={`grid gap-4 md:gap-6 ${
           viewMode === "grid" 
-            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3" 
+            ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3" 
             : "grid-cols-1"
         }`}>
           {files.map((file, index) => (
