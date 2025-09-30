@@ -312,7 +312,7 @@ const ShareFile = () => {
                           <SelectValue placeholder="No limit" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">No limit</SelectItem>
+                          <SelectItem value="unlimited">No limit</SelectItem>
                           <SelectItem value="1">1 download</SelectItem>
                           <SelectItem value="5">5 downloads</SelectItem>
                           <SelectItem value="10">10 downloads</SelectItem>
