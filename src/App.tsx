@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Upload from "./pages/Upload";
+import UploadNew from "./pages/UploadNew";
 import MyFiles from "./pages/MyFiles";
 import SharedFiles from "./pages/SharedFiles";
 import ShareFile from "./pages/ShareFile";
@@ -24,6 +25,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/upload" element={<Upload />} />
+          <Route path="/upload-new" element={<UploadNew />} />
           <Route path="/my-files" element={<MyFiles />} />
           <Route path="/shared" element={<SharedFiles />} />
           <Route path="/share-file" element={<ShareFile />} />
