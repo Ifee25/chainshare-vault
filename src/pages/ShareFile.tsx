@@ -33,9 +33,11 @@ import {
   Calendar
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const ShareFile = () => {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [shareType, setShareType] = useState<"private" | "public">("private");
   const [recipients, setRecipients] = useState<string[]>([]);
@@ -361,6 +363,19 @@ const ShareFile = () => {
                   >
                     <LinkIcon className="w-4 h-4 mr-2" />
                     Generate Share Link
+                  </Button>
+
+                  <div className="text-center">
+                    <span className="text-xs text-muted-foreground">or</span>
+                  </div>
+
+                  <Button 
+                    onClick={() => navigate('/upload')} 
+                    variant="secondary" 
+                    className="w-full"
+                  >
+                    <Upload className="w-4 h-4 mr-2" />
+                    Go to Upload Page
                   </Button>
 
                   {shareLink && (
