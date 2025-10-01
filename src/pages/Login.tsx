@@ -1,25 +1,40 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import { login as firebaseLogin } from "../lib/auth";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Separator } from "../components/ui/separator";
 import { Wallet, Mail, Lock, Shield } from "lucide-react";
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
+
 
 export default function Login() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleWalletConnect = () => {
     // Wallet connection logic here
     console.log("Connecting wallet...");
   };
 
-  const handleEmailLogin = (e: React.FormEvent) => {
+  const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Email login logic here
-    console.log("Logging in with email:", email);
+    setError(null);
+    setLoading(true);
+    try {
+      await firebaseLogin(email, password);
+      navigate("/");
+    } catch (err: any) {
+      setError(err.message || "Login failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -105,6 +120,7 @@ export default function Login() {
 
             {/* Email Login Form */}
             <form onSubmit={handleEmailLogin} className="space-y-4">
+              {error && <div className="text-red-500 text-sm">{error}</div>}
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
@@ -152,10 +168,11 @@ export default function Login() {
 
               <Button 
                 type="submit" 
-                className="w-full h-11 bg-secondary hover:bg-secondary/90 transition-all duration-300"
+                className="w-full h-11 bg-primary hover:bg-secondary/90 transition-all duration-300"
                 size="lg"
+                disabled={loading}
               >
-                Sign In
+                {loading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 

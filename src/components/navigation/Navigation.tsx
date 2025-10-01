@@ -1,5 +1,8 @@
-import { Link, useLocation } from "react-router-dom";
-import { cn } from "@/lib/utils";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { getAuth, onAuthStateChanged, type User } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { logout } from "../../lib/auth";
+import { cn } from "../../lib/utils";
 import { 
   Home, 
   Upload, 
@@ -8,11 +11,26 @@ import {
   Shield, 
   Wallet 
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "../ui/button";
 
 const Navigation = () => {
   const location = useLocation();
-  
+  const navigate = useNavigate();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate("/login");
+  };
+
   const navItems = [
     { href: "/", label: "Dashboard", icon: Home },
     { href: "/upload", label: "Upload", icon: Upload },
@@ -59,15 +77,26 @@ const Navigation = () => {
         </div>
       </div>
       
-      <Link to="/login">
-        <Button 
-          variant="outline" 
+      {user ? (
+        <Button
+          variant="outline"
           className="flex items-center space-x-2 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+          onClick={handleLogout}
         >
           <Wallet className="w-4 h-4" />
-          <span>Login</span>
+          <span>Logout</span>
         </Button>
-      </Link>
+      ) : (
+        <Link to="/login">
+          <Button 
+            variant="outline" 
+            className="flex items-center space-x-2 border-primary/20 hover:border-primary/40 hover:bg-primary/10"
+          >
+            <Wallet className="w-4 h-4" />
+            <span>Login</span>
+          </Button>
+        </Link>
+      )}
     </nav>
   );
 };

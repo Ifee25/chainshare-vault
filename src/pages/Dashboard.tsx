@@ -1,8 +1,8 @@
-import Navigation from "@/components/navigation/Navigation";
-import StatsCard from "@/components/dashboard/StatsCard";
-import FileCard from "@/components/files/FileCard";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Navigation from "../components/navigation/Navigation";
+import StatsCard from "../components/dashboard/StatsCard";
+import FileCard from "../components/files/FileCard";
+import { Button } from "../components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { 
   Upload, 
   Files, 
@@ -13,9 +13,13 @@ import {
   Plus
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { getAuth } from "firebase/auth";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const auth = getAuth();
+  const user = auth.currentUser;
+  console.log("Current user:", user);
   
   const recentFiles = [
     {
@@ -52,6 +56,12 @@ const Dashboard = () => {
       <Navigation />
       
       <main className="container mx-auto px-4 md:px-6 py-4 md:py-8">
+        {user && (
+          <div className="mb-6 p-4 rounded-lg bg-primary/10 border border-primary/20 flex items-center gap-4">
+            <div className="font-semibold text-primary">Welcome, {user.displayName || user.email}!</div>
+            <div className="text-xs text-muted-foreground">({user.email})</div>
+          </div>
+        )}
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6 md:mb-8">
           <div>

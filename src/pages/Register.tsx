@@ -1,14 +1,15 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Checkbox } from "@/components/ui/checkbox";
+import { register as firebaseRegister } from "../lib/auth";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../components/ui/card";
+import { Separator } from "../components/ui/separator";
+import { Checkbox } from "../components/ui/checkbox";
 import { Wallet, Mail, Lock, Shield, User } from "lucide-react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
 export default function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,24 +17,34 @@ export default function Register() {
     confirmPassword: "",
     acceptTerms: false
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleWalletConnect = () => {
     // Wallet connection logic here
     console.log("Connecting wallet for registration...");
   };
 
-  const handleEmailRegister = (e: React.FormEvent) => {
+  const handleEmailRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     if (formData.password !== formData.confirmPassword) {
-      console.error("Passwords don't match");
+      setError("Passwords don't match");
       return;
     }
     if (!formData.acceptTerms) {
-      console.error("Please accept terms and conditions");
+      setError("Please accept terms and conditions");
       return;
     }
-    // Email registration logic here
-    console.log("Registering with email:", formData.email);
+    setLoading(true);
+    try {
+  await firebaseRegister(formData.email, formData.password, formData.name);
+      navigate("/login");
+    } catch (err: any) {
+      setError(err.message || "Registration failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const updateFormData = (field: string, value: string | boolean) => {
@@ -123,6 +134,7 @@ export default function Register() {
 
             {/* Email Registration Form */}
             <form onSubmit={handleEmailRegister} className="space-y-4">
+              {error && <div className="text-red-500 text-sm">{error}</div>}
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-sm font-medium">
                   Full Name
@@ -218,12 +230,12 @@ export default function Register() {
                 className={`w-full h-11 transition-all duration-300 ${
                   formData.acceptTerms 
                     ? "bg-gradient-primary hover:bg-gradient-primary/90 text-primary-foreground shadow-glow hover:shadow-glow/80" 
-                    : "bg-secondary/50 hover:bg-secondary/60"
+                    : "bg-primary hover:bg-secondary"
                 }`}
                 size="lg"
-                disabled={!formData.acceptTerms}
+                disabled={!formData.acceptTerms || loading}
               >
-                Create Account
+                {loading ? "Registering..." : "Create Account"}
               </Button>
             </form>
 
